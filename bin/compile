@@ -1,0 +1,28 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Downloading PDI..."
+
+wget -nv https://downloads.sourceforge.net/project/pentaho/Data%20Integration/7.1/pdi-ce-7.1.0.0-12.zip -O pdi.zip
+
+echo "-----> Unpacking..."
+
+unzip -tq pdi.zip
+unzip -q pdi.zip
+rm pdi.zip
+mv data-integration $2/pdi
+chmod +x $2/pdi/spoon.sh
+
+echo "-----> Exporting spoon.sh..."
+
+export spoon=$2/pdi/spoon.sh
+
+cat << EOF >> $1/spoon.sh
+#!/bin/sh
+sh $2/pdi/spoon.sh
+EOF
+
+chmod +x $1/spoon.sh
